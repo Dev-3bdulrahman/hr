@@ -4,7 +4,6 @@ namespace Dev3bdulrahman\Hr\Models;
 
 use App\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,6 +16,7 @@ class Designation extends Model
     protected $fillable = [
         'company_id',
         'name',
+        'level',
         'status',
     ];
 
@@ -25,3 +25,4 @@ class Designation extends Model
         return $this->hasMany(Employee::class, 'designation_id');
     }
 }
+
