@@ -28,9 +28,9 @@ class HrServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../Translations', 'hr');
 
         // Register Livewire Components
-        Livewire::component('hr::admin.employees.index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Employees\Index::class);
-        Livewire::component('hr::admin.attendance.index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Attendance\Index::class);
-        Livewire::component('hr::admin.leaves.index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Leaves\Index::class);
-        Livewire::component('hr::admin.payroll.index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Payroll\Index::class);
+        Livewire::component('hr-employees-index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Employees\Index::class);
+        Livewire::component('hr-attendance-index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Attendance\Index::class);
+        Livewire::component('hr-leaves-index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Leaves\Index::class);
+        Livewire::component('hr-payroll-index', \Dev3bdulrahman\Hr\Http\Controllers\Web\Admin\Payroll\Index::class);
     }
 }
