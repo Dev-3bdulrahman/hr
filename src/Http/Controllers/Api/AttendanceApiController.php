@@ -2,24 +2,46 @@
 
 namespace Dev3bdulrahman\Hr\Http\Controllers\Api;
 
-use Dev3bdulrahman\Hr\Services\HrService;
+use App\Http\Controllers\Controller;
+use App\Traits\HasApiResponse;
+use Dev3bdulrahman\Hr\Http\Requests\Api\StoreAttendanceApiRequest;
 use Dev3bdulrahman\Hr\Http\Resources\AttendanceResource;
+use Dev3bdulrahman\Hr\Models\Attendance;
+use Dev3bdulrahman\Hr\Services\HrService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class AttendanceApiController extends Controller
 {
-    public function log(Request $request, HrService $service): JsonResponse
-    {
-        $request->validate([
-            'employee_id' => 'required|integer|exists:hr_employees,id',
-            'date' => 'required|date',
-            'check_in' => 'required|string',
-            'check_out' => 'nullable|string',
-        ]);
+    use HasApiResponse;
 
-        $companyId = $request->header('X-Company-ID') ?? 1;
+    /**
+     * List all attendance records.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', Attendance::class);
+
+        $companyId = $request->header('X-Company-ID') ?? auth()->user()->company_id;
+
+        $attendances = Attendance::where('company_id', $companyId)
+            ->with('employee')
+            ->get();
+
+        return $this->success(
+            AttendanceResource::collection($attendances),
+            __('hr::hr.attendance_retrieved')
+        );
+    }
+
+    /**
+     * Log attendance for an employee.
+     */
+    public function store(StoreAttendanceApiRequest $request, HrService $service): JsonResponse
+    {
+        $this->authorize('create', Attendance::class);
+
+        $companyId = $request->header('X-Company-ID') ?? auth()->user()->company_id;
 
         $attendance = $service->logAttendance(
             $request->input('employee_id'),
@@ -29,10 +51,40 @@ class AttendanceApiController extends Controller
             $companyId
         );
 
-        return response()->json([
-            'success' => true,
-            'message' => __('Attendance logged successfully.'),
-            'data' => new AttendanceResource($attendance),
-        ]);
+        return $this->success(
+            new AttendanceResource($attendance),
+            __('hr::hr.attendance_logged'),
+            201
+        );
+    }
+
+    /**
+     * Show a single attendance record.
+     */
+    public function show(Attendance $attendance): JsonResponse
+    {
+        $this->authorize('view', $attendance);
+
+        $attendance->load('employee');
+
+        return $this->success(
+            new AttendanceResource($attendance),
+            __('hr::hr.attendance_details_retrieved')
+        );
+    }
+
+    /**
+     * Delete an attendance record.
+     */
+    public function destroy(Attendance $attendance): JsonResponse
+    {
+        $this->authorize('delete', $attendance);
+
+        $attendance->delete();
+
+        return $this->success(
+            null,
+            __('hr::hr.attendance_deleted')
+        );
     }
 }
