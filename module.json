@@ -1,0 +1,11 @@
+{
+    "name": "HR",
+    "slug": "hr",
+    "version": "1.0.0",
+    "description": "Human Resources Management",
+    "description_ar": "إدارة الموارد البشرية",
+    "is_active": true,
+    "provider": "Dev3bdulrahman\\Hr\\HrServiceProvider",
+    "dependencies": [],
+    "order": 6
+}
