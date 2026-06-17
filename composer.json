@@ -2,7 +2,7 @@
     "name": "dev-3bdulrahman/hr",
     "description": "A Human Resources module for Laravel ERP — employees, attendance, leaves & payroll.",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "license": "MIT",
     "authors": [
         {
